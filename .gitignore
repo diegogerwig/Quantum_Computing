@@ -1,6 +1,7 @@
 # DIR
-42_IBM_Quantum_2023/
-QClass*/
+42_IBM_Quantum_2023/_info
+42_IBM_Quantum_2023/python
+**/_Solutions/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
