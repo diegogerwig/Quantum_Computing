@@ -2,6 +2,11 @@
 
 ## My Badges
 
+### QClass 2023-2024
+<div style="display: flex; flex-direction: column; align-items: center;">
+    <img src="./_badges/QCourse501-1-214_Certificate.png" width="300">
+</div>
+
 ### Quantum Explorers 2023
 <div style="display: flex; flex-direction: column; align-items: center;">
     <img src="./_badges/quantum-explorer-2023-advanced.png" width="200" style="margin-bottom: 10px;">
