@@ -4,7 +4,7 @@
 
 ### Quantum Explorers 2023
 <div style="display: flex; flex-direction: column; align-items: center;">
-    <img src="./_badges/quantum-explorer-2023-advanced.png" width="200">
+    <img src="./_badges/quantum-explorer-2023-advanced.png" width="250">
     <img src="./_badges/badge_quantum_explorers_2023.png" width="250">
 </div>
 
