@@ -8,7 +8,7 @@
     <img src="./_badges/badge_quantum_explorers_2023.png" width="250" style="margin-top: 10px;">
 </div>
 <div style="display: flex; justify-content: center; align-items: center;">
-    <img src="./_badges/quantum-explorer-2023-advanced.png" width="250" style="margin-right: 10px;">
+    <img src="./_badges/quantum-explorer-2023-advanced.png" width="200" style="margin-right: 10px;">
     <img src="./_badges/badge_quantum_explorers_2023.png" width="250" style="margin-left: 10px;">
 </div>
 
