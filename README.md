@@ -31,6 +31,7 @@
 </div>
 
 
+
 ### Summer School 2023
 <div style="display: flex; flex-direction: column; align-items: center;">
     <img src="./_badges/qiskit-global-summer-school-2023-quantum-excellence.png" width="200">
