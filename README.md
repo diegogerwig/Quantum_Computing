@@ -9,7 +9,7 @@
 </div>
 <div style="display: flex; justify-content: center; align-items: center; position: relative; height: 300px;">
     <img src="./_badges/quantum-explorer-2023-advanced.png" width="200" style="position: absolute; top: 50%; transform: translateY(-50%); margin-right: 20px;">
-    <img src="./_badges/badge_quantum_explorers_2023.png" width="250" style="position: absolute; top: 50%; transform: translateY(-50%); left: 300px; down: 20px">
+    <img src="./_badges/badge_quantum_explorers_2023.png" width="250" style="position: absolute; top: 50%; transform: translateY(-50%); left: 300px; down: 100px">
 </div>
 
 
