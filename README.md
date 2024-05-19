@@ -23,7 +23,7 @@
     <img src="./_badges/badge_quantum_explorers_2023.png" width="250" style="margin-top: 10px;">
 </div>
 
-### Quantum Explorers 2023
+### Quantum Explorers 2023                                                       ..                                               ....                                                                            ..
 
 <div style="display: flex; justify-content: center; align-items: center; height: 300px; position: relative;">
     <img src="./_badges/quantum-explorer-2023-advanced.png" width="200" style="position: absolute; top: 50%; transform: translateY(-50%); margin-right: 10px;">
