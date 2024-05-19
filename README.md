@@ -3,6 +3,8 @@
 ## My Badges
 
 ### Quantum Explorers 2023
-
+<img src="./_badges/quantum-explorer-2023-advanced" width="300">
 <img src="./_badges/badge_quantum_explorers_2023.png" width="300">
 
+### Summer School 2023
+<img src="./_badges/qiskit-global-summer-school-2023-quantum-excellence.png" width="300">
