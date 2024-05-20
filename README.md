@@ -4,7 +4,7 @@
 
 ### QClass 2023-2024
 <div style="display: flex; flex-direction: column; align-items: center;">
-    <img src="./_badges/QCourse501-1-214_Certificate.jpg" width="300">
+    <img src="./_badges/QCourse501-1-214_badge.jpg" width="300">
 </div>
 
 ### Quantum Explorers 2023
