@@ -9,8 +9,6 @@
     </a>
 </div>
 
-
-
 ### Quantum Explorers 2023
 <div style='display: flex; flex-direction: column; align-items: center;'>
     <a href='https://www.credly.com/badges/1dfa6b06-c443-4d56-b6e8-3375dd7ad03b/linked_in_profile' target='_blank'>
