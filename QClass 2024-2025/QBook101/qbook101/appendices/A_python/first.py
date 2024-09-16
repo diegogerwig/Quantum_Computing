@@ -1,4 +1,3 @@
-
 print("hello world")
 
 str="*"
