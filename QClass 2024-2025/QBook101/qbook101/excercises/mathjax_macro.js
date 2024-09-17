@@ -41,7 +41,6 @@ wrt("\\newcommand{\\pstate}[1]{ \\lceil \\mspace{-1mu} #1 \\mspace{-1.5mu} \\rfl
 wrt("\\newcommand{\\faircoin}{ \\mymatrix{rr}{ \\onehalf & \\onehalf \\\\ \\onehalf & \\onehalf }} ");
 wrt("$");
 
-
 function qworld_header(title_str) {
 	wrt("<title>Exercises for "+title_str+"</title>");
 	wrt(`
@@ -54,7 +53,6 @@ function qworld_header(title_str) {
 	wrt("<h2 align='center'>Exercises for "+title_str+"</h2>");
 }
 
-
 var counter = 0; 
 var user_answers = [];
 var option_tags = ['a','b','c','d','e'];
@@ -63,9 +61,11 @@ var option_counter = 0;
 function print_br() {
 	wrt("<br>");
 }
+
 function gid(pid) {
 	return document.getElementById(pid);
 }
+
 function gname(pname) {
 	return document.getElementsByName(pname);
 }
@@ -75,10 +75,12 @@ function start_div() {
 	wrt("<div id='div"+counter+"' >"+counter+".");
 	option_counter = 0;
 }
+
 function end_div() {
 	wrt("</div>");
 	wrt("<hr>");		
 }
+
 function print_answer(t_or_f,answer) {
 	wrt("&nbsp;&nbsp;&nbsp;&nbsp;");
 	wrt("<input type='radio' name='radio"+counter+"' value='"+t_or_f+"'>");
@@ -87,12 +89,11 @@ function print_answer(t_or_f,answer) {
 	option_counter++;
 }
 
-
-
 function print_check_now() {
 	wrt("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
 	wrt("<input type='button' id='button"+counter+"' value='check now' style='background-color:#ffffff;' onclick='check_now("+counter+")'>")
 }
+
 function print_check_all() {
 	wrt("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
 	wrt("<input type='button' value='check all answers' style='background-color:#ffffff;' onclick='check_all()'>");	
@@ -114,6 +115,7 @@ function is_answer_correct(pcounter){
 	}
 	return -1;
 }
+
 function check_now(pcounter) {
 	var answer_status = is_answer_correct(pcounter);
 	if (answer_status==1) {
@@ -134,12 +136,14 @@ function check_now(pcounter) {
 	}
 	print_user_score()
 }
+
 function disable_answer(pcounter) {
 	var answers = gname("radio"+pcounter);
 	for (var i=0;i<answers.length;i++) {
 		answers[i].disabled = true;
 	}
 }
+
 function check_all() {
 	for (var i=1;i<=counter;i++) {
 		if (user_answers[i-1] == 0) {
@@ -154,6 +158,7 @@ function inialize_user_answers() {
 		user_answers[i] = -1;
 	}
 }
+
 function print_user_score() {
 	var correct = 0, incorrect = 0, empty = 0;
 	for (var i=0;i<counter;i++) {
