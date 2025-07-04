@@ -29,7 +29,7 @@ Quantum computing holds the promise to transform industries and scientific field
 
 <div style='display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;'>
 
-<a href="./_badges/ADEQUATE_Completion.png" target="_blank">
+<!-- <a href="./_badges/ADEQUATE_Completion.png" target="_blank">
   <img src="./_badges/ADEQUATE_Completion.png" width="300" title="ADEQUATE Certificate 2025">
 </a>
 
@@ -43,7 +43,7 @@ Quantum computing holds the promise to transform industries and scientific field
 
 <a href="./_badges/QCourse501-1_Certificate.jpg" target="_blank">
   <img src="./_badges/QCourse501-1_Certificate.jpg" width="300" title="QCourse 501-1 (Sep 2023–Jan 2024)">
-</a>
+</a> -->
 
 </div>
 
