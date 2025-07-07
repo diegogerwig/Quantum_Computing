@@ -23,6 +23,7 @@ Quantum computing holds the promise to transform industries and scientific field
 
 ---
 
+
 ## 🏅 Certifications & Achievements
 
 ### 📚 QClass by QWorld (2023–2025)
