@@ -79,6 +79,3 @@ This repository is exclusive to **QGSS25 enrolled participants**. Please do not 
 ## 🤝 Credits and Contributors
 
 Organized by IBM Quantum with support from the global Qiskit community.
-
-
-
