@@ -186,3 +186,5 @@ def generate_stabilizer_plots(hx_matrix, hz_matrix):
 
     _create_plot(hx_matrix, stabilizersX_to_show, "X-Stabilizer Check - 5, 66")
     _create_plot(hz_matrix, stabilizersZ_to_show, "Z-Stabilizer Check - 5, 66")
+
+
