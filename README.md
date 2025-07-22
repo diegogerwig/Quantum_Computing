@@ -5,9 +5,6 @@ This repository collects certificates, badges, and milestones from my learning p
 
 ---
 
-
-
-
 ## ⚛️ What is Quantum Computing?
 
 **Quantum computing** is a new paradigm of computation that leverages the principles of quantum mechanics — such as **superposition**, **entanglement**, and **quantum interference** — to process information in fundamentally different ways compared to classical computers.
