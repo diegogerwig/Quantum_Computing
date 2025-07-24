@@ -92,7 +92,3 @@ This repository serves as a personal archive and inspiration to continue advanci
 
 Feel free to connect with me on [LinkedIn](https://www.linkedin.com/in/diegogerwig)  
 or visit my [GitHub profile](https://github.com/diegogerwig) to explore more projects.
-
-
-
-
