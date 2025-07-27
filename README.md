@@ -3,6 +3,9 @@
 Welcome to my personal quantum computing journey!  
 This repository collects certificates, badges, and milestones from my learning path between **2023–2025**, including participation in official Qiskit and QWorld programs.
 
+
+
+
 ---
 
 ## ⚛️ What is Quantum Computing?
