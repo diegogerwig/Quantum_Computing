@@ -24,8 +24,6 @@ from qiskit_ibm_runtime.options import NoiseLearnerOptions, TwirlingOptions
 
 
 
-
-
 UNSUPPORTED_GATES = [
     "reset",
     "if_else",
