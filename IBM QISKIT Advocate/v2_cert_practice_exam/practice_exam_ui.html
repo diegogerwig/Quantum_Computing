@@ -1,41 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Qiskit v2.x Certification Exam</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; color: #333; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .exam-container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 800px; margin: 20px; }
-        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #0f62fe; padding-bottom: 15px; margin-bottom: 20px; }
+        :root {
+            --bg: #121212; --container-bg: #1e1e1e; --text: #e0e0e0; --accent: #4589ff; --border: #333; 
+            --btn-bg: #2a2a2a; --btn-hover: #3a3a3a; --correct-bg: #193b2d; --correct-border: #24a148; 
+            --correct-text: #6fdc8c; --incorrect-bg: #441418; --incorrect-border: #da1e28; 
+            --incorrect-text: #ff8389; --feedback-bg: #1a2639; --code-bg: #2a2a2a;
+        }
+        [data-theme="light"] {
+            --bg: #f4f7f6; --container-bg: #ffffff; --text: #333333; --accent: #0f62fe; --border: #e0e0e0; 
+            --btn-bg: #f4f7f6; --btn-hover: #e5eaea; --correct-bg: #defbe6; --correct-border: #24a148; 
+            --correct-text: #198038; --incorrect-bg: #fff1f1; --incorrect-border: #da1e28; 
+            --incorrect-text: #a2191f; --feedback-bg: #e5f6ff; --code-bg: #f8f9fa;
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; transition: background 0.3s, color 0.3s; }
+        .exam-container { background: var(--container-bg); padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); width: 100%; max-width: 800px; margin: 20px; transition: background 0.3s; }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent); padding-bottom: 15px; margin-bottom: 20px; }
         .header div { font-size: 1.1em; font-weight: bold; }
-        .stats { display: flex; gap: 20px; }
+        .stats { display: flex; gap: 20px; align-items: center; }
         .stat-correct { color: #24a148; }
         .stat-incorrect { color: #da1e28; }
-        .question-title { font-size: 1.2em; color: #0f62fe; margin-bottom: 10px; }
-        .question-text { font-size: 1.1em; margin-bottom: 25px; line-height: 1.5; white-space: pre-wrap; font-family: 'Consolas', 'Courier New', monospace; background-color: #f8f9fa; padding: 15px; border-radius: 5px; border: 1px solid #e0e0e0; }
+        #theme-toggle { background: none; border: 1px solid var(--border); border-radius: 4px; color: var(--text); padding: 5px 10px; cursor: pointer; transition: 0.3s; }
+        #theme-toggle:hover { background: var(--btn-hover); }
+        .question-title { font-size: 1.2em; color: var(--accent); margin-bottom: 10px; }
+        .question-text { font-size: 1.1em; margin-bottom: 25px; line-height: 1.5; white-space: pre-wrap; font-family: 'Consolas', 'Courier New', monospace; background-color: var(--code-bg); padding: 15px; border-radius: 5px; border: 1px solid var(--border); }
         .options { display: flex; flex-direction: column; gap: 10px; }
-        .option-btn { background-color: #f4f7f6; border: 2px solid #e0e0e0; padding: 15px; border-radius: 6px; font-size: 1em; cursor: pointer; text-align: left; transition: all 0.2s; font-family: 'Consolas', 'Courier New', monospace; white-space: pre-wrap; }
-        .option-btn:hover:not(:disabled) { background-color: #e5eaea; border-color: #0f62fe; }
-        .option-btn:disabled { cursor: not-allowed; }
-        .correct { background-color: #defbe6 !important; border-color: #24a148 !important; color: #198038; }
-        .incorrect { background-color: #fff1f1 !important; border-color: #da1e28 !important; color: #a2191f; }
-        .feedback { margin-top: 20px; padding: 15px; border-radius: 6px; background-color: #e5f6ff; border-left: 5px solid #0f62fe; display: none; }
-        .next-btn { margin-top: 25px; background-color: #0f62fe; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-size: 1em; cursor: pointer; float: right; display: none; }
-        .next-btn:hover { background-color: #0353e9; }
+        .option-btn { background-color: var(--btn-bg); color: var(--text); border: 2px solid var(--border); padding: 15px; border-radius: 6px; font-size: 1em; cursor: pointer; text-align: left; transition: all 0.2s; font-family: 'Consolas', 'Courier New', monospace; white-space: pre-wrap; }
+        .option-btn:hover:not(:disabled) { background-color: var(--btn-hover); border-color: var(--accent); }
+        .option-btn:disabled { cursor: not-allowed; opacity: 0.8; }
+        .correct { background-color: var(--correct-bg) !important; border-color: var(--correct-border) !important; color: var(--correct-text) !important; }
+        .incorrect { background-color: var(--incorrect-bg) !important; border-color: var(--incorrect-border) !important; color: var(--incorrect-text) !important; }
+        .feedback { margin-top: 20px; padding: 15px; border-radius: 6px; background-color: var(--feedback-bg); border-left: 5px solid var(--accent); display: none; }
+        .next-btn { margin-top: 25px; background-color: var(--accent); color: white; border: none; padding: 12px 24px; border-radius: 6px; font-size: 1em; cursor: pointer; float: right; display: none; }
+        .next-btn:hover { opacity: 0.9; }
         .result-screen { display: none; text-align: center; }
-        .result-screen h1 { color: #0f62fe; }
+        .result-screen h1 { color: var(--accent); }
         .clear { clear: both; }
     </style>
 </head>
 <body>
 <div class="exam-container" id="exam-ui">
     <div class="header">
-        <div id="progress-text">Question 1 / 47</div>
+        <div id="progress-text">Question 1 / 20</div>
         <div class="stats">
             <div>Time: <span id="timer">00:00</span></div>
             <div class="stat-correct">Correct: <span id="score-correct">0</span></div>
             <div class="stat-incorrect">Incorrect: <span id="score-incorrect">0</span></div>
+            <button id="theme-toggle" onclick="toggleTheme()">☀️ Light</button>
         </div>
     </div>
     <div class="question-title" id="q-topic">Topic</div>
@@ -343,7 +358,7 @@
     {
         "id": 23,
         "topic": "Create quantum circuits (Diagrams)",
-        "q": "Consider the following circuit diagram output:\n\n     ┌───┐     \nq_0: ┤ H ├──■──\n     └───┘┌─┴─┐\nq_1: ─────┤ X ├\n          └───┘\n\nWhich of the following Qiskit code snippets produces this exact circuit?",
+        "q": "Consider the following circuit diagram output:\n\n     \u250c\u2500\u2500\u2500\u2510     \nq_0: \u2524 H \u251c\u2500\u2500\u25a0\u2500\u2500\n     \u2514\u2500\u2500\u2500\u2518\u250c\u2500\u2534\u2500\u2510\nq_1: \u2500\u2500\u2500\u2500\u2500\u2524 X \u251c\n          \u2514\u2500\u2500\u2500\u2518\n\nWhich of the following Qiskit code snippets produces this exact circuit?",
         "options": [
             "A) qc = QuantumCircuit(2); qc.x(0); qc.ch(0, 1)",
             "B) qc = QuantumCircuit(2); qc.h(0); qc.cx(0, 1)",
@@ -703,16 +718,157 @@
         ],
         "ans": "B",
         "exp": "The `initial_layout` parameter allows you to explicitly provide a list or dictionary mapping logical qubits from your circuit to the physical qubits of the target backend."
+    },
+    {
+        "id": 51,
+        "topic": "Quantum Info",
+        "q": "Which function computes the reduced density matrix of a subsystem by tracing out the rest of the system?",
+        "options": [
+            "A) qiskit.quantum_info.partial_trace",
+            "B) qiskit.quantum_info.reduced_density",
+            "C) DensityMatrix.trace_out",
+            "D) Statevector.reduce"
+        ],
+        "ans": "A",
+        "exp": "partial_trace takes a quantum state (Statevector or DensityMatrix) and a list of subsystems to trace over, returning the reduced DensityMatrix."
+    },
+    {
+        "id": 52,
+        "topic": "Use the estimator primitive",
+        "q": "How do you configure the target precision (e.g., to 0.01) for all EstimatorV2 jobs running through a specific instance?",
+        "options": [
+            "A) estimator.options.default_precision = 0.01",
+            "B) EstimatorV2(precision=0.01)",
+            "C) estimator.set_precision(0.01)",
+            "D) pub = (circuit, obs, 0.01)"
+        ],
+        "ans": "A",
+        "exp": "In V2 primitives, execution options are managed via the options attribute. Setting estimator.options.default_precision configures the target precision."
+    },
+    {
+        "id": 53,
+        "topic": "Use the sampler primitive",
+        "q": "In Qiskit Runtime, what does setting `sampler.options.resilience_level = 1` achieve for SamplerV2?",
+        "options": [
+            "A) It enables Zero Noise Extrapolation (ZNE).",
+            "B) It enables Readout Error Mitigation (Twirled Readout Error eXtinction).",
+            "C) It applies Dynamical Decoupling.",
+            "D) It does nothing; SamplerV2 does not support resilience."
+        ],
+        "ans": "B",
+        "exp": "For SamplerV2, resilience level 1 enables readout error mitigation (often implemented as TREX), which helps correct measurement errors."
+    },
+    {
+        "id": 54,
+        "topic": "Run quantum circuits",
+        "q": "What is the key difference between using a `Session` and a `Batch` in Qiskit Runtime?",
+        "options": [
+            "A) Batch runs jobs sequentially on the same QPU; Session runs them in parallel across multiple QPUs.",
+            "B) Session is designed for iterative workloads requiring exclusive access; Batch submits multiple independent jobs to run in parallel.",
+            "C) Session is free; Batch requires premium access.",
+            "D) They are identical aliases."
+        ],
+        "ans": "B",
+        "exp": "A Session locks the QPU for iterative algorithms (like VQE), while Batch is optimized for executing multiple independent jobs concurrently without locking."
+    },
+    {
+        "id": 55,
+        "topic": "Perform quantum operations",
+        "q": "How can you convert a `QuantumCircuit` object named `qc` into a custom gate that can be appended to other circuits?",
+        "options": [
+            "A) qc.to_instruction()",
+            "B) qc.to_gate()",
+            "C) Gate(qc)",
+            "D) qc.as_gate()"
+        ],
+        "ans": "B",
+        "exp": "The `to_gate()` method converts a QuantumCircuit into a Gate object, which can then be controlled or appended to larger circuits."
+    },
+    {
+        "id": 56,
+        "topic": "Perform quantum operations",
+        "q": "You want to bind the value `3.14` to a `Parameter('theta')` in your circuit. Which method correctly creates a new circuit with the bound parameter?",
+        "options": [
+            "A) qc.assign_parameters({theta: 3.14})",
+            "B) qc.bind({theta: 3.14})",
+            "C) qc.theta = 3.14",
+            "D) qc.set_parameters([3.14])"
+        ],
+        "ans": "A",
+        "exp": "The `assign_parameters` method takes a dictionary (or a list) and returns a new circuit with the specified parameters bound to the given values."
+    },
+    {
+        "id": 57,
+        "topic": "Create quantum circuits",
+        "q": "Which module in Qiskit contains pre-built standard quantum algorithms and operations, such as the Quantum Fourier Transform (QFT)?",
+        "options": [
+            "A) qiskit.algorithms",
+            "B) qiskit.circuit.library",
+            "C) qiskit.providers",
+            "D) qiskit.utils"
+        ],
+        "ans": "B",
+        "exp": "The `qiskit.circuit.library` module contains a wide variety of standard gates and complex pre-built circuits, including the QFT."
+    },
+    {
+        "id": 58,
+        "topic": "Transpilation",
+        "q": "In Qiskit v2.x, the backend object contains comprehensive information about the physical QPU's constraints (connectivity, gate errors, instructions). Which attribute holds this information?",
+        "options": [
+            "A) backend.configuration()",
+            "B) backend.properties()",
+            "C) backend.target",
+            "D) backend.info"
+        ],
+        "ans": "C",
+        "exp": "In the BackendV2 specification, the `target` attribute (a `Target` object) unifies and replaces the older configuration() and properties() methods, providing a complete description of the ISA."
+    },
+    {
+        "id": 59,
+        "topic": "Create quantum circuits (Dynamic)",
+        "q": "Qiskit v2.x introduced support for dynamic circuit `switch` statements. What is the correct syntax to execute operations conditionally based on multiple possible values of a classical register `cr`?",
+        "options": [
+            "A) qc.switch(cr, {0: qc.x, 1: qc.y})",
+            "B) with qc.switch(cr) as case: case(0): qc.x(0)",
+            "C) with qc.switch(cr) as case:\\n    with case(0):\\n        qc.x(0)",
+            "D) qc.if_test(cr == 0).x(0)"
+        ],
+        "ans": "C",
+        "exp": "The `switch` context manager yields a `case` object, which is then used as a nested context manager to define the operations for each specific classical value."
+    },
+    {
+        "id": 60,
+        "topic": "Quantum Info",
+        "q": "How do you calculate the Von Neumann entropy of a quantum state represented by a `DensityMatrix` in Qiskit?",
+        "options": [
+            "A) state.entropy()",
+            "B) qiskit.quantum_info.entropy(state)",
+            "C) qiskit.quantum_info.von_neumann(state)",
+            "D) calculate_entropy(state)"
+        ],
+        "ans": "B",
+        "exp": "The `entropy` function in `qiskit.quantum_info` calculates the Von Neumann entropy (base e, by default) of a given density matrix or statevector."
     }
 ];
-    // El examen real de IBM exige unas 47 correctas de 68 (aprox 69%). Haremos el simulacro de 47 preguntas.
-    const TOTAL_QUESTIONS = Math.min(47, db.length); 
+    const TOTAL_QUESTIONS = 20; // Exact constraint
     let examQuestions = [];
     let currentIdx = 0;
     let correctAnswers = 0;
     let incorrectAnswers = 0;
     let startTime;
     let timerInterval;
+
+    function toggleTheme() {
+        const root = document.documentElement;
+        const btn = document.getElementById('theme-toggle');
+        if (root.getAttribute('data-theme') === 'dark') {
+            root.setAttribute('data-theme', 'light');
+            btn.innerText = '🌙 Dark';
+        } else {
+            root.setAttribute('data-theme', 'dark');
+            btn.innerText = '☀️ Light';
+        }
+    }
 
     function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
@@ -797,7 +953,7 @@
         document.getElementById('final-time').innerText = `Time elapsed: ${document.getElementById('timer').innerText}`;
         
         const msgEl = document.getElementById('final-message');
-        if (percentage >= 69) { 
+        if (percentage >= 70) { 
             msgEl.innerText = "🎉 PASS! You demonstrate a solid understanding of Qiskit v2.x.";
             msgEl.style.color = "#24a148";
         } else {
