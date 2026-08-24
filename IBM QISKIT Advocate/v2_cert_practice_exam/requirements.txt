@@ -1,0 +1,5 @@
+# Qiskit Advocate Program - Dependencies
+qiskit>=1.0.0
+qiskit-ibm-runtime>=0.23.0
+python-dotenv>=1.0.0
+jupyter>=1.0.0
