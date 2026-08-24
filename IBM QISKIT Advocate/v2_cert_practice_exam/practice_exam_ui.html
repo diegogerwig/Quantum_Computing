@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qiskit v2.x Certification Exam</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .exam-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 800px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #0f62fe;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .header div {
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+        .stats {
+            display: flex;
+            gap: 20px;
+        }
+        .stat-correct { color: #24a148; }
+        .stat-incorrect { color: #da1e28; }
+        
+        .question-title {
+            font-size: 1.2em;
+            color: #0f62fe;
+            margin-bottom: 10px;
+        }
+        .question-text {
+            font-size: 1.1em;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option-btn {
+            background-color: #f4f7f6;
+            border: 2px solid #e0e0e0;
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+        }
+        .option-btn:hover:not(:disabled) {
+            background-color: #e5eaea;
+            border-color: #0f62fe;
+        }
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+        .correct {
+            background-color: #defbe6 !important;
+            border-color: #24a148 !important;
+            color: #198038;
+        }
+        .incorrect {
+            background-color: #fff1f1 !important;
+            border-color: #da1e28 !important;
+            color: #a2191f;
+        }
+        
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            background-color: #e5f6ff;
+            border-left: 5px solid #0f62fe;
+            display: none;
+        }
+        
+        .next-btn {
+            margin-top: 25px;
+            background-color: #0f62fe;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            float: right;
+            display: none;
+        }
+        .next-btn:hover { background-color: #0353e9; }
+        
+        .result-screen { display: none; text-align: center; }
+        .result-screen h1 { color: #0f62fe; }
+        .clear { clear: both; }
+    </style>
+</head>
+<body>
+
+<div class="exam-container" id="exam-ui">
+    <div class="header">
+        <div id="progress-text">Question 1 / 20</div>
+        <div class="stats">
+            <div>Time: <span id="timer">00:00</span></div>
+            <div class="stat-correct">Correct: <span id="score-correct">0</span></div>
+            <div class="stat-incorrect">Incorrect: <span id="score-incorrect">0</span></div>
+        </div>
+    </div>
+    
+    <div class="question-title" id="q-topic">Topic</div>
+    <div class="question-text" id="q-text">Question text goes here?</div>
+    
+    <div class="options" id="options-container">
+        <!-- Buttons injected by JS -->
+    </div>
+    
+    <div class="feedback" id="feedback-box">
+        <strong>Explanation:</strong> <span id="explanation-text"></span>
+    </div>
+    
+    <button class="next-btn" id="next-btn" onclick="loadNextQuestion()">Next Question</button>
+    <div class="clear"></div>
+</div>
+
+<div class="exam-container result-screen" id="result-screen">
+    <h1>Exam Completed!</h1>
+    <h2 id="final-score"></h2>
+    <h3 id="final-time"></h3>
+    <p id="final-message" style="font-size: 1.2em; margin-top: 20px;"></p>
+    <button class="next-btn" style="float:none; display:inline-block;" onclick="location.reload()">Retake Exam</button>
+</div>
+
+<script>
+    // Inyectamos la base de datos JSON directamente en el script
+    const db = [
+    {
+        "id": 1,
+        "topic": "Transpilation",
+        "q": "In Qiskit v2.x, what is the standard method to transpile a generic circuit into an Instruction Set Architecture (ISA) circuit for a specific backend?",
+        "options": [
+            "A) qiskit.compiler.transpile",
+            "B) generate_preset_pass_manager",
+            "C) backend.compile",
+            "D) QuantumCircuit.decompose"
+        ],
+        "ans": "B",
+        "exp": "The recommended approach in v2.x is to instantiate a pass manager using generate_preset_pass_manager(backend=backend) and then call pm.run(circuit)."
+    },
+    {
+        "id": 2,
+        "topic": "V2 Primitives",
+        "q": "What happens if you submit a non-ISA circuit (containing gates not supported by the backend) directly to SamplerV2?",
+        "options": [
+            "A) It transpiles automatically.",
+            "B) It throws an ISA validation error.",
+            "C) It runs on a simulator.",
+            "D) It ignores the unsupported gates."
+        ],
+        "ans": "B",
+        "exp": "V2 Primitives strictly require ISA circuits and do not perform implicit transpilation. Submitting a non-ISA circuit will throw a validation error."
+    },
+    {
+        "id": 3,
+        "topic": "PUBs (Sampler)",
+        "q": "Which of the following is the correct structure for a Primitive Unified Bloc (PUB) when submitting a parameterized circuit to SamplerV2?",
+        "options": [
+            "A) (circuit, parameter_values)",
+            "B) (circuit, observable, parameter_values)",
+            "C) [circuit, parameter_values]",
+            "D) {circuit: parameter_values}"
+        ],
+        "ans": "A",
+        "exp": "SamplerV2 PUBs are tuples. They take the circuit and optionally the parameter values. Observables are not used in SamplerV2."
+    },
+    {
+        "id": 4,
+        "topic": "PUBs (Estimator)",
+        "q": "Which of the following is the correct structure for a Primitive Unified Bloc (PUB) when submitting a parameterized circuit to EstimatorV2?",
+        "options": [
+            "A) (circuit, parameter_values)",
+            "B) (circuit, observable, parameter_values)",
+            "C) (observable, circuit, parameter_values)",
+            "D) [circuit, observable]"
+        ],
+        "ans": "B",
+        "exp": "EstimatorV2 PUBs require an observable as the second element of the tuple, followed optionally by parameter values."
+    },
+    {
+        "id": 5,
+        "topic": "Quantum Info",
+        "q": "Which class is recommended in Qiskit v2.x to represent Pauli observables efficiently?",
+        "options": [
+            "A) PauliSumOp",
+            "B) Operator",
+            "C) SparsePauliOp",
+            "D) Observable"
+        ],
+        "ans": "C",
+        "exp": "SparsePauliOp is the standard class in Qiskit v2.x for representing and manipulating Pauli observables. PauliSumOp (from opflow) was deprecated and removed."
+    },
+    {
+        "id": 6,
+        "topic": "Circuit Manipulation",
+        "q": "How do you combine two quantum circuits, `qc1` and `qc2`, in Qiskit v2.x by appending `qc2` to the end of `qc1`?",
+        "options": [
+            "A) qc1.append(qc2)",
+            "B) qc1 + qc2",
+            "C) qc1.compose(qc2)",
+            "D) qc1.merge(qc2)"
+        ],
+        "ans": "C",
+        "exp": "The compose() method is the standard way to merge circuits in Qiskit."
+    },
+    {
+        "id": 7,
+        "topic": "Data Extraction (Sampler)",
+        "q": "After running a job with SamplerV2, how do you extract the measurement counts from the first PUB result?",
+        "options": [
+            "A) result.get_counts()",
+            "B) result[0].data.meas.get_counts()",
+            "C) result[0].counts",
+            "D) result.data[0].get_counts()"
+        ],
+        "ans": "B",
+        "exp": "In V2 Primitives, results are accessed via the DataBin. If your classical register is named 'meas' (or default), you access it via result[0].data.meas.get_counts()."
+    },
+    {
+        "id": 8,
+        "topic": "Data Extraction (Estimator)",
+        "q": "After running a job with EstimatorV2, how do you extract the expected values?",
+        "options": [
+            "A) result[0].data.evs",
+            "B) result.values()",
+            "C) result[0].expectation_values",
+            "D) result.get_evs()"
+        ],
+        "ans": "A",
+        "exp": "EstimatorV2 results store the expectation values in the 'evs' attribute of the PUB result data."
+    },
+    {
+        "id": 9,
+        "topic": "Parameters",
+        "q": "If you need to create a list of 5 parameters for a circuit, what is the most efficient Qiskit class to use?",
+        "options": [
+            "A) ParameterList('theta', 5)",
+            "B) ParameterVector('theta', 5)",
+            "C) [Parameter('theta') for _ in range(5)]",
+            "D) CircuitParameters(5)"
+        ],
+        "ans": "B",
+        "exp": "ParameterVector creates an array of Parameter objects that share a common string prefix and are indexed automatically."
+    },
+    {
+        "id": 10,
+        "topic": "State Fidelity",
+        "q": "Which function from `qiskit.quantum_info` calculates the fidelity between two Statevector objects?",
+        "options": [
+            "A) state_fidelity(sv1, sv2)",
+            "B) calculate_fidelity(sv1, sv2)",
+            "C) sv1.fidelity(sv2)",
+            "D) entanglement_fidelity(sv1, sv2)"
+        ],
+        "ans": "A",
+        "exp": "The state_fidelity function from qiskit.quantum_info is used to compute the fidelity between two quantum states."
+    },
+    {
+        "id": 11,
+        "topic": "Optimization Levels",
+        "q": "In `generate_preset_pass_manager`, what is the maximum `optimization_level` available?",
+        "options": [
+            "A) 1",
+            "B) 2",
+            "C) 3",
+            "D) 4"
+        ],
+        "ans": "C",
+        "exp": "The optimization levels range from 0 (no optimization, just mapping) to 3 (heavy optimization for circuit depth and gate count)."
+    },
+    {
+        "id": 12,
+        "topic": "Dynamic Circuits",
+        "q": "In Qiskit v2.x, what is the recommended method to execute a conditional gate based on a classical bit measurement?",
+        "options": [
+            "A) qc.x(0).c_if(cr, 1)",
+            "B) with qc.if_test((cr, 1)): qc.x(0)",
+            "C) qc.conditional(cr, 1, 'x', 0)",
+            "D) qc.if_c(cr, 1).x(0)"
+        ],
+        "ans": "B",
+        "exp": "The if_test context manager is the standard and most robust way to build dynamic circuits in Qiskit v2.x, replacing the older c_if method."
+    },
+    {
+        "id": 13,
+        "topic": "Measurements",
+        "q": "If `qc.measure_all()` is called on a circuit that already has classical bits, what happens?",
+        "options": [
+            "A) It overwrites the existing classical bits.",
+            "B) It throws an error.",
+            "C) It adds a new classical register containing the measurement results.",
+            "D) It only measures the unmeasured qubits."
+        ],
+        "ans": "C",
+        "exp": "measure_all() always creates a new ClassicalRegister and adds it to the circuit to store the measurement outcomes of all qubits."
+    },
+    {
+        "id": 14,
+        "topic": "Primitives Execution",
+        "q": "How do you specify the number of shots when executing a job with SamplerV2?",
+        "options": [
+            "A) SamplerV2(shots=1024)",
+            "B) sampler.run([pub], shots=1024)",
+            "C) qc.set_shots(1024)",
+            "D) sampler.options.default_shots = 1024; sampler.run([pub])"
+        ],
+        "ans": "D",
+        "exp": "While passing shots to run() is valid in some runtime environments, configuring the primitive options (e.g., sampler.options.default_shots) or passing it directly to the run() method in Runtime V2 is the standard approach."
+    },
+    {
+        "id": 15,
+        "topic": "Quantum Info",
+        "q": "How can you convert a generic QuantumCircuit into a matrix representation to check its unitary operator?",
+        "options": [
+            "A) Operator(qc)",
+            "B) qc.to_matrix()",
+            "C) Unitary(qc)",
+            "D) qc.get_unitary()"
+        ],
+        "ans": "A",
+        "exp": "Passing a QuantumCircuit to the Operator class from qiskit.quantum_info evaluates the circuit and returns its unitary matrix."
+    },
+    {
+        "id": 16,
+        "topic": "Circuit Inspection",
+        "q": "Which method returns a dictionary containing the count of each gate used in the circuit?",
+        "options": [
+            "A) qc.count_ops()",
+            "B) qc.gate_counts()",
+            "C) qc.get_gates()",
+            "D) qc.summary()"
+        ],
+        "ans": "A",
+        "exp": "qc.count_ops() returns an OrderedDict with the names of the operations as keys and their frequencies as values."
+    },
+    {
+        "id": 17,
+        "topic": "Density Matrices",
+        "q": "How do you check if a DensityMatrix represents a pure quantum state?",
+        "options": [
+            "A) purity == 1.0",
+            "B) is_pure()",
+            "C) trace() == 1.0",
+            "D) check_purity()"
+        ],
+        "ans": "A",
+        "exp": "You can calculate the purity of a DensityMatrix object using its purity attribute or method. A state is pure if the purity is 1.0."
+    },
+    {
+        "id": 18,
+        "topic": "Transpilation",
+        "q": "What is the primary role of the `basis_gates` argument in a pass manager?",
+        "options": [
+            "A) To define the layout of the qubits.",
+            "B) To specify the target instruction set architecture (ISA) gates.",
+            "C) To optimize the circuit depth.",
+            "D) To simulate hardware noise."
+        ],
+        "ans": "B",
+        "exp": "basis_gates tells the transpiler which gates are physically executable on the target backend, forcing it to decompose all other gates into this set."
+    },
+    {
+        "id": 19,
+        "topic": "Sessions",
+        "q": "What is the main advantage of using a `Session` context manager when sending multiple jobs to IBM Quantum?",
+        "options": [
+            "A) It makes the jobs run on a simulator for free.",
+            "B) It allows jobs to skip the queue and run sequentially without interruption.",
+            "C) It automatically transpiles the circuits.",
+            "D) It compresses the job payload."
+        ],
+        "ans": "B",
+        "exp": "Sessions allow multiple iterative workloads to be grouped together, minimizing queue times between related jobs on real hardware."
+    },
+    {
+        "id": 20,
+        "topic": "Bitwise Operations",
+        "q": "What is the effect of applying an X gate followed by an H gate (X then H) on a qubit initialized in state |0>?",
+        "options": [
+            "A) |+> state",
+            "B) |-> state",
+            "C) |1> state",
+            "D) |0> state"
+        ],
+        "ans": "B",
+        "exp": "X on |0> creates |1>. Applying H on |1> creates the |-> (minus) superposition state."
+    },
+    {
+        "id": 21,
+        "topic": "Qiskit Runtime",
+        "q": "Which class is used to authenticate and connect to IBM Quantum Platform to retrieve backends?",
+        "options": [
+            "A) IBMProvider",
+            "B) QiskitRuntimeService",
+            "C) QuantumService",
+            "D) IBMQ"
+        ],
+        "ans": "B",
+        "exp": "QiskitRuntimeService from qiskit_ibm_runtime is the standard class for authenticating and accessing IBM hardware in v2.x."
+    },
+    {
+        "id": 22,
+        "topic": "Observables",
+        "q": "How do you tensor two SparsePauliOp objects, `op1` and `op2`?",
+        "options": [
+            "A) op1.tensor(op2)",
+            "B) op1 * op2",
+            "C) op1 ^ op2",
+            "D) op1.compose(op2)"
+        ],
+        "ans": "A",
+        "exp": "The tensor() method is used to compute the tensor product of two operators in the quantum_info module."
+    }
+];
+    
+    // Configuración del examen
+    const TOTAL_QUESTIONS = 20;
+    let examQuestions = [];
+    let currentIdx = 0;
+    let correctAnswers = 0;
+    let incorrectAnswers = 0;
+    
+    // Temporizador
+    let startTime;
+    let timerInterval;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function startExam() {
+        // Seleccionar 20 preguntas aleatorias de la base de datos
+        examQuestions = shuffle([...db]).slice(0, TOTAL_QUESTIONS);
+        startTime = Date.now();
+        timerInterval = setInterval(updateTimer, 1000);
+        renderQuestion();
+    }
+
+    function updateTimer() {
+        const elapsed = Math.floor((Date.now() - startTime) / 1000);
+        const m = String(Math.floor(elapsed / 60)).padStart(2, '0');
+        const s = String(elapsed % 60).padStart(2, '0');
+        document.getElementById('timer').innerText = m + ':' + s;
+    }
+
+    function renderQuestion() {
+        const q = examQuestions[currentIdx];
+        
+        document.getElementById('progress-text').innerText = `Question ${currentIdx + 1} / ${TOTAL_QUESTIONS}`;
+        document.getElementById('q-topic').innerText = q.topic;
+        document.getElementById('q-text').innerText = q.q;
+        
+        const optsContainer = document.getElementById('options-container');
+        optsContainer.innerHTML = '';
+        
+        q.options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt;
+            // Identificar la letra de la opción (A, B, C, D)
+            const letter = opt.substring(0, 1);
+            btn.onclick = () => checkAnswer(letter, btn, q);
+            optsContainer.appendChild(btn);
+        });
+        
+        document.getElementById('feedback-box').style.display = 'none';
+        document.getElementById('next-btn').style.display = 'none';
+    }
+
+    function checkAnswer(selectedLetter, btnElement, qObj) {
+        // Deshabilitar todos los botones
+        const buttons = document.querySelectorAll('.option-btn');
+        buttons.forEach(b => b.disabled = true);
+        
+        // Comprobar si es correcto
+        if (selectedLetter === qObj.ans) {
+            btnElement.classList.add('correct');
+            correctAnswers++;
+            document.getElementById('score-correct').innerText = correctAnswers;
+        } else {
+            btnElement.classList.add('incorrect');
+            incorrectAnswers++;
+            document.getElementById('score-incorrect').innerText = incorrectAnswers;
+            
+            // Resaltar también la correcta
+            buttons.forEach(b => {
+                if(b.innerText.startsWith(qObj.ans)) {
+                    b.classList.add('correct');
+                }
+            });
+        }
+        
+        // Mostrar feedback
+        document.getElementById('explanation-text').innerText = qObj.exp;
+        document.getElementById('feedback-box').style.display = 'block';
+        
+        // Mostrar botón de siguiente
+        const nextBtn = document.getElementById('next-btn');
+        nextBtn.innerText = (currentIdx === TOTAL_QUESTIONS - 1) ? 'Finish Exam' : 'Next Question';
+        nextBtn.style.display = 'block';
+    }
+
+    function loadNextQuestion() {
+        currentIdx++;
+        if (currentIdx < TOTAL_QUESTIONS) {
+            renderQuestion();
+        } else {
+            finishExam();
+        }
+    }
+
+    function finishExam() {
+        clearInterval(timerInterval);
+        document.getElementById('exam-ui').style.display = 'none';
+        
+        const resultScreen = document.getElementById('result-screen');
+        resultScreen.style.display = 'block';
+        
+        const percentage = (correctAnswers / TOTAL_QUESTIONS) * 100;
+        document.getElementById('final-score').innerText = `Final Score: ${correctAnswers} / ${TOTAL_QUESTIONS} (${percentage.toFixed(1)}%)`;
+        document.getElementById('final-time').innerText = `Time elapsed: ${document.getElementById('timer').innerText}`;
+        
+        const msgEl = document.getElementById('final-message');
+        if (percentage >= 73) {
+            msgEl.innerText = "🎉 PASS! You demonstrate a solid understanding of Qiskit v2.x.";
+            msgEl.style.color = "#24a148";
+        } else {
+            msgEl.innerText = "⚠️ FAIL. Review the V2 Primitives and ISA transpilation before taking the real exam.";
+            msgEl.style.color = "#da1e28";
+        }
+    }
+
+    // Iniciar al cargar
+    window.onload = startExam;
+</script>
+</body>
+</html>
