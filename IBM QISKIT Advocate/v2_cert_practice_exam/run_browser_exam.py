@@ -1,6 +1,7 @@
 import os
 import http.server
 import socketserver
+import webbrowser
 
 def create_and_serve_html_exam(db_path="qiskit_v2_database.json", html_filename="practice_exam_ui.html", port=8000):
     try:
@@ -10,6 +11,7 @@ def create_and_serve_html_exam(db_path="qiskit_v2_database.json", html_filename=
         print(f"Error: Could not find '{db_path}'. Ensure it is in the same directory.")
         return
 
+    # Generamos el HTML (usamos doble corchete {{ }} para el CSS/JS y simple { } para inyectar Python)
     html_content = f"""<!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
@@ -81,7 +83,7 @@ def create_and_serve_html_exam(db_path="qiskit_v2_database.json", html_filename=
 </div>
 <script>
     const db = {questions_json};
-    const TOTAL_QUESTIONS = 20; // Exact constraint
+    const TOTAL_QUESTIONS = 20; 
     let examQuestions = [];
     let currentIdx = 0;
     let correctAnswers = 0;
@@ -206,17 +208,17 @@ def create_and_serve_html_exam(db_path="qiskit_v2_database.json", html_filename=
     class Handler(http.server.SimpleHTTPRequestHandler):
         def log_message(self, format, *args): pass 
 
+    # URL local generada correctamente
+    file_url = f"http://localhost:{port}/{html_filename}"
+
     print("\n" + "="*60)
     print("✅ Exam generated successfully!")
     print(f"👉 To take the exam, click this link (or copy/paste it into Chrome):")
-    print(f"\n    http://localhost:{{port}}/{{html_filename}}\n")
+    print(f"\n    {file_url}\n")
     print("Press Ctrl+C to stop the server when you are done.")
     print("="*60 + "\n")
 
-    import webbrowser
-    
-    # Intento de apertura automática con Chrome u OS Default
-    file_url = f"http://localhost:{{port}}/{{html_filename}}"
+    # Intento de apertura automática en Chrome
     chrome_opened = False
     chrome_paths = [
         "C:/Program Files/Google/Chrome/Application/chrome.exe %s",
@@ -228,11 +230,13 @@ def create_and_serve_html_exam(db_path="qiskit_v2_database.json", html_filename=
             webbrowser.get(path).open(file_url)
             chrome_opened = True
             break
-        except webbrowser.Error: continue
+        except webbrowser.Error: 
+            continue
             
     if not chrome_opened:
         webbrowser.open(file_url)
 
+    # Iniciar el servidor local
     socketserver.TCPServer.allow_reuse_address = True
     with socketserver.TCPServer(("", port), Handler) as httpd:
         try:
