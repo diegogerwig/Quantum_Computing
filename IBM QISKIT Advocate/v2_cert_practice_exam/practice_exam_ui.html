@@ -5,142 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Qiskit v2.x Certification Exam</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .exam-container {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 800px;
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid #0f62fe;
-            padding-bottom: 15px;
-            margin-bottom: 20px;
-        }
-        .header div {
-            font-size: 1.1em;
-            font-weight: bold;
-        }
-        .stats {
-            display: flex;
-            gap: 20px;
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; color: #333; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .exam-container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 800px; margin: 20px; }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #0f62fe; padding-bottom: 15px; margin-bottom: 20px; }
+        .header div { font-size: 1.1em; font-weight: bold; }
+        .stats { display: flex; gap: 20px; }
         .stat-correct { color: #24a148; }
         .stat-incorrect { color: #da1e28; }
-        
-        .question-title {
-            font-size: 1.2em;
-            color: #0f62fe;
-            margin-bottom: 10px;
-        }
-        .question-text {
-            font-size: 1.1em;
-            margin-bottom: 25px;
-            line-height: 1.5;
-        }
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .option-btn {
-            background-color: #f4f7f6;
-            border: 2px solid #e0e0e0;
-            padding: 15px;
-            border-radius: 6px;
-            font-size: 1em;
-            cursor: pointer;
-            text-align: left;
-            transition: all 0.2s;
-        }
-        .option-btn:hover:not(:disabled) {
-            background-color: #e5eaea;
-            border-color: #0f62fe;
-        }
-        .option-btn:disabled {
-            cursor: not-allowed;
-        }
-        .correct {
-            background-color: #defbe6 !important;
-            border-color: #24a148 !important;
-            color: #198038;
-        }
-        .incorrect {
-            background-color: #fff1f1 !important;
-            border-color: #da1e28 !important;
-            color: #a2191f;
-        }
-        
-        .feedback {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 6px;
-            background-color: #e5f6ff;
-            border-left: 5px solid #0f62fe;
-            display: none;
-        }
-        
-        .next-btn {
-            margin-top: 25px;
-            background-color: #0f62fe;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 6px;
-            font-size: 1em;
-            cursor: pointer;
-            float: right;
-            display: none;
-        }
+        .question-title { font-size: 1.2em; color: #0f62fe; margin-bottom: 10px; }
+        .question-text { font-size: 1.1em; margin-bottom: 25px; line-height: 1.5; white-space: pre-wrap; font-family: 'Consolas', 'Courier New', monospace; background-color: #f8f9fa; padding: 15px; border-radius: 5px; border: 1px solid #e0e0e0; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option-btn { background-color: #f4f7f6; border: 2px solid #e0e0e0; padding: 15px; border-radius: 6px; font-size: 1em; cursor: pointer; text-align: left; transition: all 0.2s; font-family: 'Consolas', 'Courier New', monospace; white-space: pre-wrap; }
+        .option-btn:hover:not(:disabled) { background-color: #e5eaea; border-color: #0f62fe; }
+        .option-btn:disabled { cursor: not-allowed; }
+        .correct { background-color: #defbe6 !important; border-color: #24a148 !important; color: #198038; }
+        .incorrect { background-color: #fff1f1 !important; border-color: #da1e28 !important; color: #a2191f; }
+        .feedback { margin-top: 20px; padding: 15px; border-radius: 6px; background-color: #e5f6ff; border-left: 5px solid #0f62fe; display: none; }
+        .next-btn { margin-top: 25px; background-color: #0f62fe; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-size: 1em; cursor: pointer; float: right; display: none; }
         .next-btn:hover { background-color: #0353e9; }
-        
         .result-screen { display: none; text-align: center; }
         .result-screen h1 { color: #0f62fe; }
         .clear { clear: both; }
     </style>
 </head>
 <body>
-
 <div class="exam-container" id="exam-ui">
     <div class="header">
-        <div id="progress-text">Question 1 / 20</div>
+        <div id="progress-text">Question 1 / 47</div>
         <div class="stats">
             <div>Time: <span id="timer">00:00</span></div>
             <div class="stat-correct">Correct: <span id="score-correct">0</span></div>
             <div class="stat-incorrect">Incorrect: <span id="score-incorrect">0</span></div>
         </div>
     </div>
-    
     <div class="question-title" id="q-topic">Topic</div>
     <div class="question-text" id="q-text">Question text goes here?</div>
-    
-    <div class="options" id="options-container">
-        <!-- Buttons injected by JS -->
-    </div>
-    
-    <div class="feedback" id="feedback-box">
-        <strong>Explanation:</strong> <span id="explanation-text"></span>
-    </div>
-    
+    <div class="options" id="options-container"></div>
+    <div class="feedback" id="feedback-box"><strong>Explanation:</strong> <span id="explanation-text"></span></div>
     <button class="next-btn" id="next-btn" onclick="loadNextQuestion()">Next Question</button>
     <div class="clear"></div>
 </div>
-
 <div class="exam-container result-screen" id="result-screen">
     <h1>Exam Completed!</h1>
     <h2 id="final-score"></h2>
@@ -148,9 +52,7 @@
     <p id="final-message" style="font-size: 1.2em; margin-top: 20px;"></p>
     <button class="next-btn" style="float:none; display:inline-block;" onclick="location.reload()">Retake Exam</button>
 </div>
-
 <script>
-    // Inyectamos la base de datos JSON directamente en el script
     const db = [
     {
         "id": 1,
@@ -437,17 +339,378 @@
         ],
         "ans": "A",
         "exp": "The tensor() method is used to compute the tensor product of two operators in the quantum_info module."
+    },
+    {
+        "id": 23,
+        "topic": "Create quantum circuits (Diagrams)",
+        "q": "Consider the following circuit diagram output:\n\n     ┌───┐     \nq_0: ┤ H ├──■──\n     └───┘┌─┴─┐\nq_1: ─────┤ X ├\n          └───┘\n\nWhich of the following Qiskit code snippets produces this exact circuit?",
+        "options": [
+            "A) qc = QuantumCircuit(2); qc.x(0); qc.ch(0, 1)",
+            "B) qc = QuantumCircuit(2); qc.h(0); qc.cx(0, 1)",
+            "C) qc = QuantumCircuit(2); qc.h(1); qc.cx(1, 0)",
+            "D) qc = QuantumCircuit(2); qc.cx(0, 1); qc.h(0)"
+        ],
+        "ans": "B",
+        "exp": "The diagram shows a Hadamard (H) gate on q_0, followed by a CNOT (CX) where q_0 is the control (black dot) and q_1 is the target (cross)."
+    },
+    {
+        "id": 24,
+        "topic": "Operate with OpenQASM",
+        "q": "You have a fully designed `QuantumCircuit` named `qc`. You need to export this circuit as an OpenQASM 3.0 string to share with a colleague. Which of the following is the correct approach in Qiskit v2.x?",
+        "options": [
+            "A) qiskit.qasm3.dumps(qc)",
+            "B) qc.to_qasm(version=3)",
+            "C) qiskit.qasm2.export(qc)",
+            "D) OpenQASM3(qc).read()"
+        ],
+        "ans": "A",
+        "exp": "The qiskit.qasm3 module is the standard for OpenQASM 3 integration. The dumps() function serializes a QuantumCircuit into an OpenQASM 3 string."
+    },
+    {
+        "id": 25,
+        "topic": "Visualize quantum circuits",
+        "q": "Look at the following code:\n\nqc.draw(output='___')\n\nWhich string must be passed to the `output` parameter to render the circuit as a high-quality graphical image using Matplotlib instead of ASCII text?",
+        "options": [
+            "A) 'latex'",
+            "B) 'image'",
+            "C) 'mpl'",
+            "D) 'text'"
+        ],
+        "ans": "C",
+        "exp": "Passing output='mpl' invokes the Matplotlib drawer, returning a graphical figure of the quantum circuit."
+    },
+    {
+        "id": 26,
+        "topic": "Perform quantum operations",
+        "q": "Review the following statevector evolution:\n\nfrom qiskit.quantum_info import Statevector\nfrom qiskit.circuit.library import XGate\n\nsv = Statevector([1, 0]) # Initialized in |0>\nsv_evolved = sv.evolve(XGate())\n\nWhat are the amplitudes of `sv_evolved`?",
+        "options": [
+            "A) [1, 0]",
+            "B) [0, 1]",
+            "C) [0.707, 0.707]",
+            "D) [0, -1]"
+        ],
+        "ans": "B",
+        "exp": "The Statevector is initialized in the |0> state (amplitudes [1, 0]). Evolving it with the Pauli-X gate flips the state to |1>, resulting in amplitudes [0, 1]."
+    },
+    {
+        "id": 27,
+        "topic": "Use the estimator primitive",
+        "q": "You are defining an observable for EstimatorV2 using `SparsePauliOp.from_list([('ZX', 1.0)])`. According to Qiskit's little-endian qubit ordering, which qubits do these Pauli operators apply to?",
+        "options": [
+            "A) Z on Qubit 0, X on Qubit 1",
+            "B) Z on Qubit 1, X on Qubit 0",
+            "C) X on both Qubit 0 and Qubit 1",
+            "D) Z on both Qubit 0 and Qubit 1"
+        ],
+        "ans": "B",
+        "exp": "Qiskit uses little-endian ordering (right-to-left). In the string 'ZX', the rightmost character (X) applies to qubit 0, and the leftmost character (Z) applies to qubit 1."
+    },
+    {
+        "id": 28,
+        "topic": "Retrieve and analyze results",
+        "q": "After successfully running an `EstimatorV2` job, you extract the result for your circuit into `pub_result = job.result()[0]`. How do you access the metadata dictionary (which contains information like simulator variance or target precision) for this specific PUB?",
+        "options": [
+            "A) job.metadata()",
+            "B) pub_result.data.metadata",
+            "C) pub_result.metadata",
+            "D) pub_result.get_info()"
+        ],
+        "ans": "C",
+        "exp": "The PubResult object contains a `metadata` attribute (a dictionary) that stores execution-specific information for that particular PUB."
+    },
+    {
+        "id": 29,
+        "topic": "Create quantum circuits (Dynamic)",
+        "q": "Analyze the following dynamic circuit snippet:\n\nqc = QuantumCircuit(2, 1)\nqc.h(0)\nqc.measure(0, 0)\nwith qc.if_test((qc.clbits[0], 1)):\n    qc.x(1)\n\nUnder what condition is the Pauli-X gate applied to qubit 1?",
+        "options": [
+            "A) Only if the measurement of qubit 0 yields 1.",
+            "B) Only if the measurement of qubit 0 yields 0.",
+            "C) It is applied unconditionally because if_test is evaluated at compilation.",
+            "D) If the probability of measuring 1 is greater than 50%."
+        ],
+        "ans": "A",
+        "exp": "The context manager `qc.if_test((qc.clbits[0], 1))` adds classical control logic to the circuit, executing the nested operations (X gate) only if the classical bit evaluates to True (1) during hardware execution."
+    },
+    {
+        "id": 30,
+        "topic": "Run quantum circuits",
+        "q": "When connecting to hardware using `QiskitRuntimeService`, which backend method guarantees that you retrieve a quantum computer that is currently online and functioning, while filtering out simulators?",
+        "options": [
+            "A) service.get_backend('ibmq_qasm_simulator')",
+            "B) service.least_busy(operational=True, simulator=False)",
+            "C) service.backends(status='active')",
+            "D) service.get_online_qpu()"
+        ],
+        "ans": "B",
+        "exp": "The `least_busy` method filters the available backends based on the provided arguments. `operational=True` ensures the system is online, and `simulator=False` strictly filters for physical QPUs."
+    },
+    {
+        "id": 31,
+        "topic": "Visualize quantum circuits, measurements",
+        "q": "You have a dictionary containing measurement counts: `counts = {'00': 500, '11': 500}`. Which function from `qiskit.visualization` generates a bar chart of these probabilities?",
+        "options": [
+            "A) plot_state_city(counts)",
+            "B) plot_bloch_vector(counts)",
+            "C) plot_histogram(counts)",
+            "D) draw_bar_chart(counts)"
+        ],
+        "ans": "C",
+        "exp": "plot_histogram() takes a dictionary of execution counts or probabilities and generates a standard bar chart, making it the primary tool for visualizing measurement outcomes."
+    },
+    {
+        "id": 32,
+        "topic": "Retrieve and analyze results (Sampler)",
+        "q": "Look at the following data extraction snippet from a SamplerV2 job:\n\nbit_array = pub_result.data.meas\n\nWhat type of object does `bit_array` represent in the new Qiskit V2 architecture?",
+        "options": [
+            "A) A standard Python dictionary of counts.",
+            "B) A pandas DataFrame.",
+            "C) A BitArray object containing the raw shot-by-shot measurement data.",
+            "D) A string of binary characters."
+        ],
+        "ans": "C",
+        "exp": "In V2 Primitives, classical register data is returned as a BitArray object. This object holds the raw shot data and provides methods like .get_counts() or .get_bitstrings() to format it."
+    },
+    {
+        "id": 33,
+        "topic": "Perform quantum operations",
+        "q": "Which of the following operations correctly applies a controlled-Z (CZ) gate where qubit 1 is the control and qubit 0 is the target?",
+        "options": [
+            "A) qc.cz(0, 1)",
+            "B) qc.cz(1, 0)",
+            "C) qc.z(0).c_if(1)",
+            "D) Both A and B are functionally identical due to the symmetry of the CZ gate."
+        ],
+        "ans": "D",
+        "exp": "The CZ gate is symmetric. A phase flip of -1 is applied to the |11> state regardless of which qubit is designated as the control and which as the target, making qc.cz(0, 1) and qc.cz(1, 0) mathematically equivalent."
+    },
+    {
+        "id": 34,
+        "topic": "Create quantum circuits",
+        "q": "Examine this circuit creation code:\n\nqc = QuantumCircuit(2)\nqc.ry(3.14, 0)\nqc.measure_all()\n\nWhat is the structural effect of calling `measure_all()` on this circuit?",
+        "options": [
+            "A) It measures the qubits directly into existing classical bits.",
+            "B) It creates a new ClassicalRegister, adds it to the circuit, and inserts a barrier before the measurements.",
+            "C) It executes the circuit immediately and returns the counts.",
+            "D) It only measures qubit 0 since qubit 1 has no gates applied."
+        ],
+        "ans": "B",
+        "exp": "measure_all() acts as a structural helper. It automatically provisions a new ClassicalRegister of the correct size, appends it, inserts a visual and optimization barrier, and maps all qubits to the new classical bits."
+    },
+    {
+        "id": 35,
+        "topic": "Visualize quantum states",
+        "q": "Which visualization function from `qiskit.visualization` plots a 3D spherical representation showing both the amplitude (as bubble size) and the phase (as color) of a quantum state?",
+        "options": [
+            "A) plot_bloch_multivector()",
+            "B) plot_state_city()",
+            "C) plot_state_qsphere()",
+            "D) plot_state_paulivec()"
+        ],
+        "ans": "C",
+        "exp": "The Q-sphere (plot_state_qsphere) is unique in its ability to visualize both the amplitude (thickness/size) and the relative phase (color) of a multi-qubit statevector on a single sphere."
+    },
+    {
+        "id": 36,
+        "topic": "Use the estimator primitive",
+        "q": "When configuring the `EstimatorV2` options, setting `options.resilience_level = 2` typically enables which error mitigation strategy on IBM Quantum hardware?",
+        "options": [
+            "A) Twirled Readout Error Extinction (TREX)",
+            "B) Zero Noise Extrapolation (ZNE)",
+            "C) Probabilistic Error Cancellation (PEC)",
+            "D) Dynamical Decoupling"
+        ],
+        "ans": "B",
+        "exp": "In the Qiskit Runtime options, resilience level 2 enables Zero Noise Extrapolation (ZNE) to mitigate gate errors, whereas level 1 enables readout error mitigation (TREX)."
+    },
+    {
+        "id": 37,
+        "topic": "Create quantum circuits",
+        "q": "How can you place a visual and optimization barrier across only qubits 0 and 2 in a 3-qubit circuit?",
+        "options": [
+            "A) qc.barrier([0, 2])",
+            "B) qc.barrier()",
+            "C) qc.add_barrier(0, 2)",
+            "D) qc.barrier(0); qc.barrier(2)"
+        ],
+        "ans": "A",
+        "exp": "The `barrier()` method accepts a list of qubits (or individual qubit indices as arguments, e.g., `qc.barrier(0, 2)`) to place a barrier selectively."
+    },
+    {
+        "id": 38,
+        "topic": "Perform quantum operations",
+        "q": "If you have a generic 2x2 numpy array `matrix` representing a valid unitary transformation, how do you apply it to qubit 0 of a circuit?",
+        "options": [
+            "A) qc.apply_matrix(matrix, 0)",
+            "B) qc.unitary(matrix, 0)",
+            "C) qc.append(UnitaryGate(matrix), [0])",
+            "D) qc.custom_gate(matrix, 0)"
+        ],
+        "ans": "B",
+        "exp": "The `qc.unitary(matrix, qubits)` method directly converts a unitary matrix into a quantum instruction and appends it to the specified qubits."
+    },
+    {
+        "id": 39,
+        "topic": "Retrieve and analyze results",
+        "q": "What format does the `get_bitstrings()` method return when called on a BitArray object from a SamplerV2 measurement?",
+        "options": [
+            "A) A dictionary mapping bitstrings to counts.",
+            "B) A list of integers.",
+            "C) A NumPy array of boolean values.",
+            "D) A list of strings, where each string represents the measurement of one shot."
+        ],
+        "ans": "D",
+        "exp": "The `get_bitstrings()` method returns the raw shot data as a list of strings (e.g., ['00', '01', '00', ...]), representing the exact outcome of every individual shot."
+    },
+    {
+        "id": 40,
+        "topic": "Create quantum circuits",
+        "q": "Which of the following code blocks correctly initializes a QuantumRegister with 3 qubits, a ClassicalRegister with 3 bits, and creates a QuantumCircuit containing them?",
+        "options": [
+            "A) qr = QuantumRegister(3); cr = ClassicalRegister(3); qc = QuantumCircuit(qr, cr)",
+            "B) qc = QuantumCircuit(QuantumRegister(3, 3))",
+            "C) qc = QuantumCircuit(3); qc.add_classical(3)",
+            "D) qr = QReg(3); cr = CReg(3); qc = Circuit(qr, cr)"
+        ],
+        "ans": "A",
+        "exp": "You must instantiate `QuantumRegister` and `ClassicalRegister` objects and pass them as arguments to the `QuantumCircuit` constructor to link them."
+    },
+    {
+        "id": 41,
+        "topic": "Quantum Info",
+        "q": "How can you instantiate a `SparsePauliOp` directly from a Pauli string like 'XYZ' without using a list?",
+        "options": [
+            "A) SparsePauliOp('XYZ')",
+            "B) SparsePauliOp.from_string('XYZ')",
+            "C) PauliOp('XYZ')",
+            "D) SparsePauliOp.create('XYZ')"
+        ],
+        "ans": "A",
+        "exp": "You can pass a standard string directly to the constructor of `SparsePauliOp` (e.g., `SparsePauliOp('XYZ')`), which creates an operator with a default coefficient of 1.0."
+    },
+    {
+        "id": 42,
+        "topic": "Operate with OpenQASM",
+        "q": "Which function allows you to load an OpenQASM 3.0 string and convert it back into a Qiskit `QuantumCircuit` object?",
+        "options": [
+            "A) qiskit.qasm3.loads()",
+            "B) QuantumCircuit.from_qasm_str()",
+            "C) qiskit.qasm3.import_str()",
+            "D) QuantumCircuit.load_qasm3()"
+        ],
+        "ans": "A",
+        "exp": "The `loads()` function from the `qiskit.qasm3` module parses an OpenQASM 3 string and constructs the corresponding `QuantumCircuit`."
+    },
+    {
+        "id": 43,
+        "topic": "Run quantum circuits",
+        "q": "When finding the least busy backend, you want to ensure the system has at least 7 qubits. Which argument must you pass to `service.least_busy()`?",
+        "options": [
+            "A) qubits >= 7",
+            "B) min_num_qubits=7",
+            "C) num_qubits=7",
+            "D) minimum_qubits=7"
+        ],
+        "ans": "B",
+        "exp": "The `min_num_qubits` argument is used in the `least_busy` (and `backends`) methods to filter out quantum systems that are too small for your circuit."
+    },
+    {
+        "id": 44,
+        "topic": "Perform quantum operations",
+        "q": "Which operation forcefully returns a qubit to the |0> state during the execution of a circuit without resetting the entire system?",
+        "options": [
+            "A) qc.clear(0)",
+            "B) qc.initialize([1, 0], 0)",
+            "C) qc.reset(0)",
+            "D) qc.zero(0)"
+        ],
+        "ans": "C",
+        "exp": "The `qc.reset()` instruction performs an active, non-reversible hardware reset on a specific qubit, forcefully collapsing it to the |0> state."
+    },
+    {
+        "id": 45,
+        "topic": "Create quantum circuits",
+        "q": "You want to know the critical path (the longest sequence of gates) of your compiled circuit `qc`. Which method returns this integer value?",
+        "options": [
+            "A) qc.length()",
+            "B) qc.depth()",
+            "C) qc.size()",
+            "D) qc.num_ops()"
+        ],
+        "ans": "B",
+        "exp": "The `depth()` method calculates the maximum number of sequential gate layers in the circuit, which is crucial for estimating hardware decoherence impacts."
+    },
+    {
+        "id": 46,
+        "topic": "Perform quantum operations",
+        "q": "The parameterized Phase gate applies a phase rotation of lambda around the Z-axis. How is it written in Qiskit?",
+        "options": [
+            "A) qc.phase(lambda, qubit)",
+            "B) qc.p(lambda, qubit)",
+            "C) Both A and B are correct.",
+            "D) qc.rz(lambda, qubit)"
+        ],
+        "ans": "B",
+        "exp": "The standard phase gate in Qiskit is called using `qc.p(theta, qubit)`. Note: while RZ applies a similar rotation, it differs by a global phase, making P the strict phase gate."
+    },
+    {
+        "id": 47,
+        "topic": "Visualize quantum states",
+        "q": "What is the primary difference between `plot_bloch_vector()` and `plot_bloch_multivector()`?",
+        "options": [
+            "A) They are identical aliases for the same function.",
+            "B) plot_bloch_vector takes 3D spherical coordinates, while multivector takes a Statevector or DensityMatrix.",
+            "C) multivector allows plotting entangled states accurately.",
+            "D) plot_bloch_vector only plots the X and Z axes."
+        ],
+        "ans": "B",
+        "exp": "plot_bloch_vector requires a list of coordinates [x, y, z] to draw a single arrow. plot_bloch_multivector takes a full quantum state object (like Statevector) and generates a Bloch sphere for each individual qubit automatically."
+    },
+    {
+        "id": 48,
+        "topic": "Use the estimator primitive",
+        "q": "In EstimatorV2, if you want to calculate the expectation value of multiple observables simultaneously for the same circuit, how should you structure the PUB?",
+        "options": [
+            "A) Submit a separate PUB for each observable.",
+            "B) Pass the observables as a list in the second position: (circuit, [obs1, obs2]).",
+            "C) Add the observables together using PauliSumOp.",
+            "D) You cannot evaluate multiple observables in a single PUB."
+        ],
+        "ans": "B",
+        "exp": "EstimatorV2 PUBs accept a single circuit and an array-like structure (list) of observables. The primitive will efficiently evaluate all observables for that circuit."
+    },
+    {
+        "id": 49,
+        "topic": "Run quantum circuits",
+        "q": "When instantiating `QiskitRuntimeService`, how do you select a specific IBM Quantum channel if you are an enterprise/premium user?",
+        "options": [
+            "A) service = QiskitRuntimeService(channel='ibm_quantum')",
+            "B) service = QiskitRuntimeService(premium=True)",
+            "C) service = QiskitRuntimeService(channel='ibm_cloud')",
+            "D) service = QiskitRuntimeService(tier='premium')"
+        ],
+        "ans": "C",
+        "exp": "The `channel` argument defines the authentication routing. Standard open-plan users use 'ibm_quantum', while pay-as-you-go or enterprise users connect via IBM Cloud using 'ibm_cloud'."
+    },
+    {
+        "id": 50,
+        "topic": "Transpilation",
+        "q": "Which transpiler argument ensures that qubits in your logical circuit are mapped to specific physical qubits on the hardware (e.g., logical q0 to physical q2)?",
+        "options": [
+            "A) layout_method",
+            "B) initial_layout",
+            "C) routing_method",
+            "D) coupling_map"
+        ],
+        "ans": "B",
+        "exp": "The `initial_layout` parameter allows you to explicitly provide a list or dictionary mapping logical qubits from your circuit to the physical qubits of the target backend."
     }
 ];
-    
-    // Configuración del examen
-    const TOTAL_QUESTIONS = 20;
+    // El examen real de IBM exige unas 47 correctas de 68 (aprox 69%). Haremos el simulacro de 47 preguntas.
+    const TOTAL_QUESTIONS = Math.min(47, db.length); 
     let examQuestions = [];
     let currentIdx = 0;
     let correctAnswers = 0;
     let incorrectAnswers = 0;
-    
-    // Temporizador
     let startTime;
     let timerInterval;
 
@@ -460,7 +723,6 @@
     }
 
     function startExam() {
-        // Seleccionar 20 preguntas aleatorias de la base de datos
         examQuestions = shuffle([...db]).slice(0, TOTAL_QUESTIONS);
         startTime = Date.now();
         timerInterval = setInterval(updateTimer, 1000);
@@ -476,7 +738,6 @@
 
     function renderQuestion() {
         const q = examQuestions[currentIdx];
-        
         document.getElementById('progress-text').innerText = `Question ${currentIdx + 1} / ${TOTAL_QUESTIONS}`;
         document.getElementById('q-topic').innerText = q.topic;
         document.getElementById('q-text').innerText = q.q;
@@ -488,22 +749,17 @@
             const btn = document.createElement('button');
             btn.className = 'option-btn';
             btn.innerText = opt;
-            // Identificar la letra de la opción (A, B, C, D)
             const letter = opt.substring(0, 1);
             btn.onclick = () => checkAnswer(letter, btn, q);
             optsContainer.appendChild(btn);
         });
-        
         document.getElementById('feedback-box').style.display = 'none';
         document.getElementById('next-btn').style.display = 'none';
     }
 
     function checkAnswer(selectedLetter, btnElement, qObj) {
-        // Deshabilitar todos los botones
         const buttons = document.querySelectorAll('.option-btn');
         buttons.forEach(b => b.disabled = true);
-        
-        // Comprobar si es correcto
         if (selectedLetter === qObj.ans) {
             btnElement.classList.add('correct');
             correctAnswers++;
@@ -512,20 +768,13 @@
             btnElement.classList.add('incorrect');
             incorrectAnswers++;
             document.getElementById('score-incorrect').innerText = incorrectAnswers;
-            
-            // Resaltar también la correcta
             buttons.forEach(b => {
-                if(b.innerText.startsWith(qObj.ans)) {
-                    b.classList.add('correct');
-                }
+                if(b.innerText.startsWith(qObj.ans)) b.classList.add('correct');
             });
         }
-        
-        // Mostrar feedback
         document.getElementById('explanation-text').innerText = qObj.exp;
         document.getElementById('feedback-box').style.display = 'block';
         
-        // Mostrar botón de siguiente
         const nextBtn = document.getElementById('next-btn');
         nextBtn.innerText = (currentIdx === TOTAL_QUESTIONS - 1) ? 'Finish Exam' : 'Next Question';
         nextBtn.style.display = 'block';
@@ -533,17 +782,13 @@
 
     function loadNextQuestion() {
         currentIdx++;
-        if (currentIdx < TOTAL_QUESTIONS) {
-            renderQuestion();
-        } else {
-            finishExam();
-        }
+        if (currentIdx < TOTAL_QUESTIONS) renderQuestion();
+        else finishExam();
     }
 
     function finishExam() {
         clearInterval(timerInterval);
         document.getElementById('exam-ui').style.display = 'none';
-        
         const resultScreen = document.getElementById('result-screen');
         resultScreen.style.display = 'block';
         
@@ -552,7 +797,7 @@
         document.getElementById('final-time').innerText = `Time elapsed: ${document.getElementById('timer').innerText}`;
         
         const msgEl = document.getElementById('final-message');
-        if (percentage >= 73) {
+        if (percentage >= 69) { 
             msgEl.innerText = "🎉 PASS! You demonstrate a solid understanding of Qiskit v2.x.";
             msgEl.style.color = "#24a148";
         } else {
@@ -561,7 +806,6 @@
         }
     }
 
-    // Iniciar al cargar
     window.onload = startExam;
 </script>
 </body>
